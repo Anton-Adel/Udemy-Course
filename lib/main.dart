@@ -79,7 +79,7 @@ class MyApp extends StatelessWidget {
       providers: [
        BlocProvider( create: (BuildContext context)=>NewsCubit()..getBusiness()..changeMode(0)),
         BlocProvider( create: (BuildContext context)=>ShopCubit()..GetHomeData()..GetCategories()..GetUserModel()..GetFavourites()),
-        BlocProvider(create: (BuildContext context)=>SocialLayoutCubit()..GetUserData()..GetPosts()..GetUsers(),)
+        BlocProvider(create: (BuildContext context)=>SocialLayoutCubit()..GetUserData()..GetPosts(),)
       ],
 
       child: BlocConsumer<NewsCubit,NewsStates>(

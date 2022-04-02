@@ -16,178 +16,180 @@ class SocialSettingsScreen extends StatelessWidget {
         var model = SocialLayoutCubit.get(context).model;
         return Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Column(
-            children: [
-              Container(
-                height: 210,
-                child: Stack(
-                  alignment: AlignmentDirectional.bottomCenter,
-                  children: [
-                    Align(
-                      alignment: AlignmentDirectional.topStart,
-                      child: Container(
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(10),
-                                topRight: Radius.circular(10))),
-                        clipBehavior: Clip.antiAliasWithSaveLayer,
-                        child: Card(
-                          //clipBehavior: Clip.antiAliasWithSaveLayer,
-                          margin: EdgeInsets.zero,
-                          child: Image(
-                            image: NetworkImage(model!.cover!),
-                            fit: BoxFit.cover,
-                            height: 150,
-                            width: double.infinity,
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Container(
+                  height: 210,
+                  child: Stack(
+                    alignment: AlignmentDirectional.bottomCenter,
+                    children: [
+                      Align(
+                        alignment: AlignmentDirectional.topStart,
+                        child: Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(10),
+                                  topRight: Radius.circular(10))),
+                          clipBehavior: Clip.antiAliasWithSaveLayer,
+                          child: Card(
+                            //clipBehavior: Clip.antiAliasWithSaveLayer,
+                            margin: EdgeInsets.zero,
+                            child: Image(
+                              image: NetworkImage(model!.cover!),
+                              fit: BoxFit.cover,
+                              height: 150,
+                              width: double.infinity,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    CircleAvatar(
-                      radius: 64,
-                      backgroundColor:
-                          Theme.of(context).scaffoldBackgroundColor,
-                      child: CircleAvatar(
-                        radius: 60,
-                        backgroundImage: NetworkImage(
-                          model.profile!,
+                      CircleAvatar(
+                        radius: 64,
+                        backgroundColor:
+                            Theme.of(context).scaffoldBackgroundColor,
+                        child: CircleAvatar(
+                          radius: 60,
+                          backgroundImage: NetworkImage(
+                            model.profile!,
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Text(
-                '${model.name}',
-                style: Theme.of(context).textTheme.bodyText1,
-              ),
-              Text(
-                '${model.bio}',
-                style:
-                    Theme.of(context).textTheme.caption!.copyWith(height: 1.9),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 15.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
+                SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  '${model.name}',
+                  style: Theme.of(context).textTheme.bodyText1,
+                ),
+                Text(
+                  '${model.bio}',
+                  style:
+                      Theme.of(context).textTheme.caption!.copyWith(height: 1.9),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 15.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: InkWell(
+                          onTap: () {},
+                          child: Column(
+                            children: [
+                              Text(
+                                '100',
+                                style: Theme.of(context).textTheme.bodyText1,
+                              ),
+                              Text(
+                                'Post',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .caption!
+                                    .copyWith(height: 1.9),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: InkWell(
+                          onTap: () {},
+                          child: Column(
+                            children: [
+                              Text(
+                                '100',
+                                style: Theme.of(context).textTheme.bodyText1,
+                              ),
+                              Text(
+                                'Post',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .caption!
+                                    .copyWith(height: 1.9),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: InkWell(
+                          onTap: () {},
+                          child: Column(
+                            children: [
+                              Text(
+                                '10K',
+                                style: Theme.of(context).textTheme.bodyText1,
+                              ),
+                              Text(
+                                'Follower',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .caption!
+                                    .copyWith(height: 1.9),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: InkWell(
+                          onTap: () {},
+                          child: Column(
+                            children: [
+                              Text(
+                                '80',
+                                style: Theme.of(context).textTheme.bodyText1,
+                              ),
+                              Text(
+                                'Following',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .caption!
+                                    .copyWith(height: 1.9),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Row(
                   children: [
                     Expanded(
-                      child: InkWell(
-                        onTap: () {},
-                        child: Column(
-                          children: [
-                            Text(
-                              '100',
-                              style: Theme.of(context).textTheme.bodyText1,
-                            ),
-                            Text(
-                              'Post',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .caption!
-                                  .copyWith(height: 1.9),
-                            ),
-                          ],
+                        child: OutlinedButton(
+                            onPressed: () {}, child: Text('Add Photos',
+                        style: TextStyle(
+                          color: Colors.grey
                         ),
-                      ),
+                        ))
+
                     ),
-                    Expanded(
-                      child: InkWell(
-                        onTap: () {},
-                        child: Column(
-                          children: [
-                            Text(
-                              '100',
-                              style: Theme.of(context).textTheme.bodyText1,
-                            ),
-                            Text(
-                              'Post',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .caption!
-                                  .copyWith(height: 1.9),
-                            ),
-                          ],
-                        ),
-                      ),
+                    SizedBox(
+                      width: 10,
                     ),
-                    Expanded(
-                      child: InkWell(
-                        onTap: () {},
-                        child: Column(
-                          children: [
-                            Text(
-                              '10K',
-                              style: Theme.of(context).textTheme.bodyText1,
-                            ),
-                            Text(
-                              'Follower',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .caption!
-                                  .copyWith(height: 1.9),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      child: InkWell(
-                        onTap: () {},
-                        child: Column(
-                          children: [
-                            Text(
-                              '80',
-                              style: Theme.of(context).textTheme.bodyText1,
-                            ),
-                            Text(
-                              'Following',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .caption!
-                                  .copyWith(height: 1.9),
-                            ),
-                          ],
-                        ),
-                      ),
+                    OutlinedButton(
+                        onPressed: () {
+                          navigate(context, Social_Edit_Profile());
+                        }, child: Icon(Icons.edit,
+                    color: Colors.black,
+                    )
                     ),
                   ],
                 ),
-              ),
-              Row(
-                children: [
-                  Expanded(
-                      child: OutlinedButton(
-                          onPressed: () {}, child: Text('Add Photos',
-                      style: TextStyle(
-                        color: Colors.grey
-                      ),
-                      ))
-
-                  ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  OutlinedButton(
-                      onPressed: () {
-                        navigate(context, Social_Edit_Profile());
-                      }, child: Icon(Icons.edit,
-                  color: Colors.black,
-                  )
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              defaultButton(function: (){
-                SignOut(context);
-              }, text: 'Sign out')
-              //  defaultButton(function: (){}, text: 'Update Profile')
-            ],
+                SizedBox(
+                  height: 20,
+                ),
+                defaultButton(function: (){
+                  SignOut(context);
+                }, text: 'Sign out')
+                //  defaultButton(function: (){}, text: 'Update Profile')
+              ],
+            ),
           ),
         );
       },

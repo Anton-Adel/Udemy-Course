@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:first/layout/social-app/social-app-cubit/social-app-states.dart';
+import 'package:first/models/social-app/MassegeModel.dart';
 import 'package:first/models/social-app/social-post-model.dart';
 import 'package:first/models/social-app/social-user-model.dart';
 import 'package:first/modules/social_app/Chat/Social-chat_screen.dart';
@@ -48,9 +49,10 @@ class SocialLayoutCubit extends Cubit<SocialStates> {
   List<String> titles = ['Home', 'Chat', 'Posts', 'Users', 'Setting'];
 
   void ChangeScreen(int index) {
+    if (index == 1) GetUsers();
     if (index == 2) {
       emit(SocialPostState());
-      index=0;
+      index = 0;
     } else {
       currentIndex = index;
       emit(SocialBottomNavBarState());
@@ -231,50 +233,80 @@ class SocialLayoutCubit extends Cubit<SocialStates> {
 
   List<SocialPostModel> post = [];
   List<String> PostId = [];
-  List<int> PostLikes=[];
+  List<int> PostLikes = [];
 
   void GetPosts() {
-    post=[];
-    PostId=[];
-    PostLikes=[];
     emit(SocialGetPostModelLoadinglState());
-    FirebaseFirestore.instance.collection('posts').orderBy('dateTime').get().then((value) {
-      value.docs.forEach((element) {
-        element.reference.collection('likes').get().then((value) {
-          PostLikes.add(value.docs.length);
+    FirebaseFirestore.instance
+        .collection('posts')
+        .orderBy('dateTime')
+        .snapshots()
+        .listen((event) {
+      post = [];
+      PostId = [];
+      PostLikes = [];
+      event.docs.forEach((element) {
+        element.reference.collection('likes')
+            .snapshots()
+        .listen((event) {
+          PostLikes.add(event.docs.length);
 
           PostId.add(element.id);
           post.add(SocialPostModel.fromjson(element.data()));
           emit(SocialGetPostModelSuccessState());
-        }).catchError((error){
-          emit(SocialGetPostModelErrorState(error.toString()));
         });
       });
-    }).catchError((error) {
-      print(error.toString());
-      emit(SocialGetPostModelErrorState(error.toString()));
     });
   }
 
 
-  void like_or(index){
 
+  // void GetPosts() {
+  //   post = [];
+  //   PostId = [];
+  //   PostLikes = [];
+  //   emit(SocialGetPostModelLoadinglState());
+  //   FirebaseFirestore.instance
+  //       .collection('posts')
+  //       .orderBy('dateTime')
+  //       .get()
+  //       .then((value)
+  //   {
+  //     value.docs.forEach((element) {
+  //       element.reference.collection('likes').get().then((value) {
+  //         PostLikes.add(value.docs.length);
+  //
+  //         PostId.add(element.id);
+  //         post.add(SocialPostModel.fromjson(element.data()));
+  //         emit(SocialGetPostModelSuccessState());
+  //       }).catchError((error) {
+  //         emit(SocialGetPostModelErrorState(error.toString()));
+  //       });
+  //     });
+  //   }).catchError((error) {
+  //     print(error.toString());
+  //     emit(SocialGetPostModelErrorState(error.toString()));
+  //   });
+  // }
+
+  void like_or(index) {
     FirebaseFirestore.instance
         .collection('posts')
         .doc(index)
         .collection('likes')
         .doc(model!.uId)
-        .get().then((value) {
-          Map<String, dynamic>? like=value.data();
-          print(like!['like']);
-         if(like['like']!=null)
-           dislike(index);
-    }).catchError((error){
+        .get()
+        .then((value) {
+      Map<String, dynamic>? like = value.data();
+      print(like!['like']);
+      if (like['like'] != null) dislike(index);
+    }).catchError((error) {
       LikePost(index);
 
       emit(SocialLikeOrErrorState(error.toString()));
     });
   }
+
   void LikePost(index) {
     FirebaseFirestore.instance
         .collection('posts')
@@ -282,43 +314,104 @@ class SocialLayoutCubit extends Cubit<SocialStates> {
         .collection('likes')
         .doc(model!.uId)
         .set({
-      'like':true,
-    }).then((value){
-
-           GetPosts();
-          emit(SocialLikeSuccessState());
-    })
-        .catchError((error){
-          emit(SocialLikeErrorState(error.toString()));
+      'like': true,
+    }).then((value) {
+      GetPosts();
+      emit(SocialLikeSuccessState());
+    }).catchError((error) {
+      emit(SocialLikeErrorState(error.toString()));
     });
-
-
   }
-  void dislike(index)
-  {
-    FirebaseFirestore.instance.collection('posts')
-        .doc(index).collection('likes').doc(model!.uId).delete().then((value) {
 
+  void dislike(index) {
+    FirebaseFirestore.instance
+        .collection('posts')
+        .doc(index)
+        .collection('likes')
+        .doc(model!.uId)
+        .delete()
+        .then((value) {
       GetPosts();
       emit(SocialDisLikeSuccessState());
-    }).catchError((error){
+    }).catchError((error) {
       emit(SocialDisLikeErrorState(error.toString()));
-    }
-    );
+    });
   }
 
-  List<SocialUserModel> Users=[];
+  List<SocialUserModel> Users = [];
 
   void GetUsers() {
+    Users = [];
     emit(SocialGetAllUsersLoadinglState());
     FirebaseFirestore.instance.collection('user').get().then((value) {
       value.docs.forEach((element) {
-        Users.add(SocialUserModel.fromjson(element.data()));
-       emit(SocialGetAllUsersSuccessState());
+        if (element.data()['uId'] != model!.uId)
+          Users.add(SocialUserModel.fromjson(element.data()));
+        emit(SocialGetAllUsersSuccessState());
       });
     }).catchError((error) {
       print(error.toString());
       emit(SocialGetAllUsersErrorState(error.toString()));
     });
+  }
+
+  void SendMassege(
+      {required String text,
+        required String receveruid,
+        required String date})
+  {
+    MassegeModel model_ = MassegeModel(
+        Date: date, ReseveruId: receveruid, SenderuId: model!.uId, Text: text);
+    FirebaseFirestore.instance
+        .collection('user')
+        .doc(model!.uId)
+        .collection('chats')
+        .doc(receveruid)
+        .collection('massages')
+        .add(model_.ToMap())
+        .then((value)  {
+      emit(SocialSendSuccessState());
+    })
+        .catchError((error) {
+      emit(SocialSendErrorState());
+    });
+
+
+    FirebaseFirestore.instance
+        .collection('user')
+        .doc(receveruid)
+        .collection('chats')
+        .doc(model!.uId)
+        .collection('massages')
+        .add(model_.ToMap())
+        .then((value)  {
+      emit(SocialSendSuccessState());
+    })
+        .catchError((error) {
+      emit(SocialSendErrorState());
+    });
+  }
+  List<MassegeModel> masseges=[];
+  void GetMasseges({
+  required String receveruid
+}){
+
+    FirebaseFirestore.instance.collection('user')
+        .doc(model!.uId)
+        .collection('chats')
+        .doc(receveruid)
+        .collection('massages')
+    .orderBy('Date')
+        .snapshots()
+        .listen((event){
+      masseges=[];
+      event.docs.forEach((element) {
+        masseges.add(MassegeModel.fromjson(element.data()));
+
+      });
+        emit(SocialGetChatSuccessState())  ;
+
+    } );
+
   }
 }

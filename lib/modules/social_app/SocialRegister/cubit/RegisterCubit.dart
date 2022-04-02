@@ -37,7 +37,8 @@ class SocialRegisterCubit extends Cubit<SocialRegisterStates> {
     required String email,
     required String phone,
     required String uId,
-  }) {
+  })
+  {
     SocialUserModel model = SocialUserModel(
         name: name, email: email, phone: phone, uId: uId, IsVerified: false,
       cover: 'https://img.freepik.com/free-psd/canvas-poster_176382-2255.jpg?w=740',
