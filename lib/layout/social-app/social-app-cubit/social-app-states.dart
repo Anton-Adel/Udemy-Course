@@ -91,3 +91,11 @@ class SocialCreatePostSuccessState extends SocialStates{}
 class SocialCreatePostErrorState extends SocialStates{}
 
 class SocialRemovePostImageState extends SocialStates{}
+
+//chat
+
+class SocialSendSuccessState extends SocialStates{}
+class SocialSendErrorState extends SocialStates{}
+
+
+class SocialGetChatSuccessState extends SocialStates{}
